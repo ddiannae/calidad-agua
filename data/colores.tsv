@@ -1,0 +1,60 @@
+column	nivel	color	orden
+calidad_alc	Alta	#29901F	1
+calidad_alc	Baja	#BC0404	4
+calidad_alc	Indeseable como FAAP	#845EAB	3
+calidad_alc	Media	#FCD262	2
+calidad_alc	NA	#999999	5
+calidad_as	Apta como FAAP	#FCD262	2
+calidad_as	No apta como FAAP	#BC0404	3
+calidad_as	Potable - Excelente	#29901F	1
+calidad_cd	No apta como FAAP	#BC0404	2
+calidad_cd	Potable - Excelente	#29901F	1
+calidad_coli_fec	Aceptable	#FCD262	3
+calidad_coli_fec	Buena calidad	#BACC55	2
+calidad_coli_fec	Contaminada	#FF9033	4
+calidad_coli_fec	Fuertemente contaminada	#BC0404	5
+calidad_coli_fec	Potable - Excelente	#29901F	1
+calidad_conduc	Buena para riego	#BACC55	2
+calidad_conduc	Dudosa para riego	#FF9033	3
+calidad_conduc	Excelente para riego	#29901F	1
+calidad_conduc	Indeseable para riego	#BC0404	3
+calidad_conduc	Permisible para riego	#FCD262	2
+calidad_conduc	NA	#999999	4
+calidad_cr	No apta como FAAP	#BC0404	2
+calidad_cr	Potable - Excelente	#29901F	1
+calidad_dur	Muy dura e indeseable usos industrial y domestico	#BC0404	4
+calidad_dur	Potable - Dura	#FF9033	3
+calidad_dur	Potable - Moderadamente suave	#FCD262	2
+calidad_dur	Potable - Suave	#29901F	1
+calidad_dur	NA	#999999	4
+calidad_fe	Potable - Excelente	#29901F	1
+calidad_fe	Sin efectos en la salud - Puede dar color al agua	#FCD262	2
+calidad_fluo	Alta	#BACC55	2
+calidad_fluo	Baja	#BC0404	4
+calidad_fluo	Media	#FCD262	3
+calidad_fluo	Potable - Optima	#29901F	1
+calidad_hg	No apta como FAAP	#BC0404	2
+calidad_hg	Potable - Excelente	#29901F	1
+calidad_mn	Potable - Excelente	#29901F	1
+calidad_mn	Puede afectar la salud	#BC0404	3
+calidad_mn	Sin efectos en la salud - Puede dar color al agua	#FCD262	2
+calidad_n_no3	No apta como FAAP	#BC0404	3
+calidad_n_no3	Potable - Buena calidad	#BACC55	2
+calidad_n_no3	Potable - Excelente	#29901F	1
+calidad_n_no3	NA	#999999	4
+calidad_pb	No apta como FAAP	#BC0404	2
+calidad_pb	Potable - Excelente	#29901F	1
+calidad_sdt_ra	Cultivos con manejo especial	#FCD262	3
+calidad_sdt_ra	Cultivos sensibles	#BACC55	2
+calidad_sdt_ra	Cultivos tolerantes	#FF9033	4
+calidad_sdt_ra	Excelente para riego	#29901F	1
+calidad_sdt_ra	Indeseable para riego	#BC0404	5
+calidad_sdt_ra	NA	#999999	6
+calidad_sdt_salin	Ligeramente salobres	#FCD262	2
+calidad_sdt_salin	Potable - Dulce	#29901F	1
+calidad_sdt_salin	Salinas	#BC0404	4
+calidad_sdt_salin	Salobres	#FF9033	3
+calidad_sdt_salin	NA	#999999	5
+semaforo	Verde	#29901F	1
+semaforo	Rojo	#BC0404	3
+semaforo	Amarillo	#FCD262	2
