@@ -44,6 +44,11 @@ function(input, output, session) {
       setView(lng = -103.4528147, lat = 24.4979901, zoom = 4)
   })
   
+  showPozoPopup <- function(clave, lat, lng) {
+    selectedPozo <- pozos[pozos$clave == clave,]
+    leafletProxy("map") %>% addPopups(lng, lat, selectedPozo$popup)
+  }
+  
   pozosInBounds <- reactive({
     if (is.null(input$map_bounds))
       return(pozos[FALSE,])
@@ -87,28 +92,14 @@ function(input, output, session) {
   ## Data Explorer ###########################################
   
   observe({
-    cities <- if (is.null(input$states)) character(0) else {
-      filter(cleantable, State %in% input$states) %>%
-        `$`('City') %>%
-        unique() %>%
-        sort()
+    municipios <- if (is.null(input$estados)) character(0) else {
+      pozos %>% 
+        filter(estado %in% input$estados) %>%
+        pull(municipio) %>%
+        sort() %>% unique()
     }
-    stillSelected <- isolate(input$cities[input$cities %in% cities])
-    updateSelectizeInput(session, "cities", choices = cities,
-                         selected = stillSelected, server = TRUE)
-  })
-  
-  observe({
-    zipcodes <- if (is.null(input$states)) character(0) else {
-      cleantable %>%
-        filter(State %in% input$states,
-               is.null(input$cities) | City %in% input$cities) %>%
-        `$`('Zipcode') %>%
-        unique() %>%
-        sort()
-    }
-    stillSelected <- isolate(input$zipcodes[input$zipcodes %in% zipcodes])
-    updateSelectizeInput(session, "zipcodes", choices = zipcodes,
+    stillSelected <- isolate(input$municipios[input$municipios %in% municipios])
+    updateSelectizeInput(session, "municipios", choices = municipios,
                          selected = stillSelected, server = TRUE)
   })
   
@@ -119,28 +110,23 @@ function(input, output, session) {
       map <- leafletProxy("map")
       map %>% clearPopups()
       dist <- 0.5
-      zip <- input$goto$zip
       lat <- input$goto$lat
-      lng <- input$goto$lng
-      showZipcodePopup(zip, lat, lng)
-      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+      long <- input$goto$long
+      pozo <- input$goto$pozo
+      showPozoPopup(pozo, lat, long)
+      map %>% fitBounds(long - dist, lat - dist, long + dist, lat + dist)
     })
   })
   
-  output$ziptable <- DT::renderDataTable({
-    # df <- cleantable %>%
-    #   filter(
-    #     Score >= input$minScore,
-    #     Score <= input$maxScore,
-    #     is.null(input$states) | State %in% input$states,
-    #     is.null(input$cities) | City %in% input$cities,
-    #     is.null(input$zipcodes) | Zipcode %in% input$zipcodes
-    #   ) %>%
-    #   mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
-    # action <- DT::dataTableAjax(session, df, outputId = "ziptable")
-    # 
-    # DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
-    DT::datatable(pozos)
+  output$pozostable <- DT::renderDataTable({
+    pozos_df <- pozos %>%
+      filter(is.null(input$estados) | estado %in% input$estados,
+            is.null(input$municipios) | municipio %in% input$municipios) %>%
+      select(-popup) %>%
+      mutate(localizar = paste('<a class="go-map" href="" data-lat="', latitud, '" data-long="', longitud, '" data-pozo="', clave, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+    action <- DT::dataTableAjax(session, pozos_df, outputId = "pozostable")
+
+    DT::datatable(pozos_df, options = list(ajax = list(url = action)), escape = FALSE)
   })
   
   

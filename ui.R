@@ -1,5 +1,38 @@
 library(leaflet)
 
+estados <- c("AGUASCALIENTES",
+             "BAJA CALIFORNIA SUR",
+             "BAJA CALIFORNIA",
+             "CAMPECHE",
+             "CHIAPAS",
+             "CHIHUAHUA",
+             "COAHUILA DE ZARAGOZA",
+             "COLIMA",
+             "DISTRITO FEDERAL",
+             "DURANGO",
+             "GUANAJUATO",
+             "GUERRERO",
+             "HIDALGO",
+             "JALISCO",
+             "MEXICO",
+             "MICHOACAN DE OCAMPO",
+             "MORELOS",
+             "NAYARIT",
+             "NUEVO LEON",
+             "OAXACA",
+             "PUEBLA",
+             "QUERETARO ARTEAGA",
+             "QUINTANA ROO",
+             "SAN LUIS POTOSI",
+             "SINALOA",
+             "SONORA",
+             "TABASCO",
+             "TAMAULIPAS",
+             "TLAXCALA",
+             "VERACRUZ DE IGNACIO DE LA LLAVE",
+             "YUCATAN",
+             "ZACATECAS")
+
 # Choices for drop-downs
 vars <- c(
   "Semáforo"= "semaforo",
@@ -48,31 +81,18 @@ navbarPage("Calidad del agua en México", id="nav",
            
   tabPanel("Explorador de datos",
     fluidRow(
-      column(3,
-             selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name), "Washington, DC"="DC"), multiple=TRUE)
+      column(4,
+             selectInput("estados", "Estado", c("Todos"="", structure(estados, names=estados)), multiple=TRUE)
       ),
-      column(3,
-             conditionalPanel("input.states",
-                              selectInput("cities", "Cities", c("All cities"=""), multiple=TRUE)
+      column(4,
+             conditionalPanel("input.estados",
+                              selectInput("municipios", "Municipios", c("Todos"=""), multiple=TRUE)
              )
-      ),
-      column(3,
-             conditionalPanel("input.states",
-                              selectInput("zipcodes", "Zipcodes", c("All zipcodes"=""), multiple=TRUE)
-             )
-      )
-    ),
-    fluidRow(
-      column(1,
-             numericInput("minScore", "Min score", min=0, max=100, value=0)
-      ),
-      column(1,
-             numericInput("maxScore", "Max score", min=0, max=100, value=100)
       )
     ),
     hr(),
-    DT::dataTableOutput("ziptable")
-           ),
-           
-           conditionalPanel("false", icon("crosshair"))
+    DT::dataTableOutput("pozostable")
+  ),
+  
+  conditionalPanel("false", icon("crosshairs"))
 )
