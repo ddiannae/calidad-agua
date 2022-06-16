@@ -66,13 +66,12 @@ navbarPage("Calidad del agua en México", id="nav",
         
         # If not using custom CSS, set height of leafletOutput to a number instead of percent
         leafletOutput("map", width="100%", height="100%"),
-        
         # Shiny versions prior to 0.11 should use class = "modal" instead.
         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                       draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                       width = 330, height = "auto",
-                      
                       h2("Pozos"),
+                      checkboxInput("verheat", "Mostrar Heatmap de Semáforo", TRUE),
                       selectInput("color", "Selecciona la variable para ajustar color", vars),
                       uiOutput("check_cuencas")
         ),

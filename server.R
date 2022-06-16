@@ -3,6 +3,7 @@ library(vroom)
 library(dplyr)
 library(janitor)
 library(leaflet)
+library(leaflet.extras)
 
 colores <- vroom::vroom("data/colores.tsv", na = "")
 pozos <- vroom::vroom("data/calidad_agua_subterranea_2020.tsv", na = "",
@@ -11,7 +12,8 @@ pozos <- vroom::vroom("data/calidad_agua_subterranea_2020.tsv", na = "",
                                        "SDT_M_mg/L" =col_character())) %>%
     janitor::clean_names() %>% 
     select(-periodo, -starts_with("cumple"), -sdt_mg_l) %>%
-    mutate(popup = paste0("<b>", clave, "</b><br/>", sitio))
+    mutate(popup = paste0("<b>", clave, "</b><br/>", sitio), 
+           semaforo = factor(semaforo, levels = c("Verde", "Amarillo", "Rojo"))) 
 
 vars <- c(
   "semaforo" = "Semáforo",
@@ -39,27 +41,17 @@ function(input, output, session) {
   
   # Create the map
   output$map <- renderLeaflet({
-    leaflet() %>%
-      addTiles(options = providerTileOptions(minZoom = 4))%>%
-      setView(lng = -103.4528147, lat = 24.4979901, zoom = 4)
+      leaflet() %>%
+      addTiles(options = providerTileOptions(minZoom = 6))%>%
+      setView(lng = -103.4528147, lat = 24.4979901, zoom = 6)
   })
+  
+ 
   
   showPozoPopup <- function(clave, lat, lng) {
     selectedPozo <- pozos[pozos$clave == clave,]
     leafletProxy("map") %>% addPopups(lng, lat, selectedPozo$popup)
   }
-  
-  pozosInBounds <- reactive({
-    if (is.null(input$map_bounds))
-      return(pozos[FALSE,])
-    bounds <- input$map_bounds
-    latRng <- range(bounds$north, bounds$south)
-    lngRng <- range(bounds$east, bounds$west)
-    
-    subset(pozos,
-           latitude >= latRng[1] & latitude <= latRng[2] &
-             longitude >= lngRng[1] & longitude <= lngRng[2])
-  })
   
   output$check_cuencas <- renderUI({checkboxGroupInput("check_cuencas",
   "Organismo de cuenca", choices = cuencas, selected = cuencas)})
@@ -67,6 +59,7 @@ function(input, output, session) {
   # # This observer is responsible for maintaining the circles and legend,
   # # according to the variables the user has chosen to map to color and size.
   observe({
+    
     colorBy <- input$color
     
     colores_cat <- colores %>%
@@ -75,18 +68,29 @@ function(input, output, session) {
       arrange(orden) 
     
     sel_cuencas <- input$check_cuencas
-    
+  
     pozos_color <- pozos %>% 
       inner_join(colores_cat, by = setNames("nivel", colorBy)) %>%
       filter(organismo_de_cuenca %in% sel_cuencas)
-  
+    
+    pBounds <- pozos %>% 
+      filter(semaforo %in% c("Rojo", "Amarillo") & 
+               (organismo_de_cuenca %in% sel_cuencas | is.null(sel_cuencas)))
+    
     leafletProxy("map", data = pozos_color) %>%
       clearMarkers() %>%
+      clearGroup("hmap") %>%
       addCircleMarkers(~longitud, ~latitud, fillOpacity=0.7, popup = ~popup,
-                       stroke = FALSE, radius = 7, fillColor=~color) %>%
+                      stroke = T,  radius = 5, weight = 1, color = "grey", fillColor=~color) %>%
       addLegend("bottomleft", colors = colores_cat$color, labels = colores_cat$nivel, na.label = "NA", 
-                values=colores_cat$nivel, title = unname(vars[colorBy]), layerId="colorLegend")
-     
+               values=colores_cat$nivel, title = unname(vars[colorBy]), layerId="colorLegend")
+      
+      if(input$verheat) {
+        leafletProxy("map") %>%
+        addHeatmap(data = pBounds, lng = pBounds$longitud, lat = pBounds$latitud, max = 3, blur = 20, radius = 20,
+                   gradient = colorNumeric("plasma", c(1, 6), reverse = T)(as.numeric(pBounds$semaforo)),
+                   group = "hmap") 
+      }
   })
   
   ## Data Explorer ###########################################
