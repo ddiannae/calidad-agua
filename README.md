@@ -1,6 +1,7 @@
 # Calidad del agua subterránea en México
 
-## Proyecto desarrollado para la Dra. Mónica Imelda Martínez, de la Unidad Académica de Ciencias Químicas de la Universidad Autónoma de Zacatecas. 
+Proyecto desarrollado en conjunto con la Dra. Mónica Imelda Martínez, investigadora del Laboratorio de Epidemiología Ambiental en la Unidad Académica de Ciencias Químicas de la Universidad Autónoma de Zacatecas. 
+
 La aplicación shiny puede visitarse la siguiente URL: https://ddiannae.shinyapps.io/calidad-agua/
 
 En esta aplicación se despliega un mapa de la República Mexicana con la ubicación de los pozos registrados por CONAGUA en el 2020. El conjunto de datos contiene el valor de los siguientes contaminantes en miligramos por litro: Alcalinidad Total, Arsénico Total, Cadmio Total, Cromo Total, Dureza Total, Hierro Total, Fluoruros Totales, Mercurio Total, Manganeso Total, Nitrógeno de Nitratos, Plomo Total, Sólidos Disueltos Totales-Medidos, y Sólidos Disueltos Totales. Además, contiene el valor de Coliformes Fecales en número más probable por 100 mililitros y el valor de Conductividad en microsiemens por centímetro. El valor de cada contaminante está asociado con una clasificación categórica de acuerdo a las escalas establecidas por CONAGUA. La variable llamada Semáforo, también establecida por CONAGUA, es un indicador del nivel de contaminación global según los contaminantes presentes en el pozo.
